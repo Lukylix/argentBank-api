@@ -1,9 +1,8 @@
 const jwt = require("jsonwebtoken");
-const { restart } = require("nodemon");
 
 module.exports.validateToken = (req, res, next) => {
   let response = {};
-
+  console.log(req.headers);
   try {
     if (!req.headers.authorization) {
       throw new Error("Token is missing from header");

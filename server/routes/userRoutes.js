@@ -11,4 +11,6 @@ router.post("/profile", tokenValidation.validateToken, userController.getUserPro
 
 router.put("/profile", tokenValidation.validateToken, userController.updateUserProfile);
 
+router.use("/accounts", require("./accountRoutes"));
+
 module.exports = router;
