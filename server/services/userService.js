@@ -20,7 +20,7 @@ module.exports.createUser = async (serviceData) => {
 
     let result = await newUser.save();
 
-    return result;
+    return result.toObject();
   } catch (error) {
     console.error("Error in userService.js", error);
     throw new Error(error);

@@ -12,7 +12,7 @@ module.exports.createAccount = async (serviceData) => {
 
     let result = await newAccount.save();
 
-    return result;
+    return result.toObject();
   } catch (error) {
     console.error("Error in accountService.js", error);
     throw new Error(error);

@@ -5,7 +5,8 @@ module.exports.validateApiKey = (req, res, next) => {
     "::ffff:127.0.0.1": true,
   };
   try {
-    if (!dicValidIps[req.ip]) throw new Error("Invalid IP");
+    if (!dicValidIps[req.ip]) throw new Error(`Invalid IP: ${req.ip}`);
+
     if (!req.headers.authorization) throw new Error("Api key is missing from header");
 
     const apiKey = req.headers.authorization;

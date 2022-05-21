@@ -8,7 +8,7 @@ module.exports.createCategory = async (serviceData) => {
 
     let result = await newCategory.save();
 
-    return result;
+    return result.toObject();
   } catch (error) {
     console.error("Error in categoryService.js", error);
     throw new Error(error);

@@ -1,24 +1,29 @@
 const axios = require("axios");
-const signupApi = "http://localhost:3001/api/v1/user/signup";
+const dotEnv = require("dotenv");
+const { populateClients } = require("./services/populateClients");
+const { populateCategories } = require("./services/populateCategories");
+const { populateAccounts } = require("./services/populateAccounts");
+dotEnv.config();
 
-const users = [
-  {
-    firstName: "Tony",
-    lastName: "Stark",
-    email: "tony@stark.com",
-    password: "password123",
-  },
-  {
-    firstName: "Steve",
-    lastName: "Rogers",
-    email: "steve@rogers.com",
-    password: "password456",
-  },
-];
-
-users.forEach((user) => {
-  axios
-    .post(signupApi, user)
-    .then((response) => console.log(response))
-    .catch((error) => console.log(error));
+const client = axios.create({
+  baseURL: "http://localhost:3001/api/v1",
 });
+
+const main = async () => {
+  try {
+    // Check if populated
+    const response = await client.get("/categories");
+    if (response.data.body.length > 0) {
+      console.log("Database already populated!");
+      return;
+    }
+
+    const [users, categories] = await Promise.all([populateClients(), populateCategories()]);
+    const usersWithAccounts = await populateAccounts(users);
+
+    console.log("Database successfully populated!");
+  } catch (error) {
+    console.log(error);
+  }
+};
+main();
