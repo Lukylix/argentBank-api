@@ -5,8 +5,12 @@ const accountSchema = new mongoose.Schema(
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      required: true,
     },
-    type: String,
+    type: {
+      type: String,
+      required: true,
+    },
     ammount: {
       type: Number,
       set: (value) => value.toFixed(2),
