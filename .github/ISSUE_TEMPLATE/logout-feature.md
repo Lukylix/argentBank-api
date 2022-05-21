@@ -1,9 +1,9 @@
 ---
-name: '#3 Logout Requirement'
+name: "#3 Logout Requirement"
 about: Issue for the logout requirement
 title: User can logout to the system
-labels: ''
-assignees: ''
+labels: ""
+assignees: ""
 ---
 
 A user should be able to:

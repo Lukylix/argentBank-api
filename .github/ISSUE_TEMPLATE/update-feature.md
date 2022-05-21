@@ -1,9 +1,9 @@
 ---
-name: '#5 Update Profile Feature'
+name: "#5 Update Profile Feature"
 about: Issue for the profile update requirement
 title: User can update their profile
-labels: ''
-assignees: ''
+labels: ""
+assignees: ""
 ---
 
 A user should be able to:

@@ -1,9 +1,9 @@
 ---
-name: '#1 Landing Page'
+name: "#1 Landing Page"
 about: Issue for the landing page requirement
 title: User can see the home page
-labels: ''
-assignees: ''
+labels: ""
+assignees: ""
 ---
 
 A user should be able to:

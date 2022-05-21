@@ -1,9 +1,9 @@
 ---
-name: '#4 Privacy Requirement'
+name: "#4 Privacy Requirement"
 about: Issue for the privacy requirement
 title: User can only see their own profile
-labels: ''
-assignees: ''
+labels: ""
+assignees: ""
 ---
 
 After successfully logging in, a user should be able to:
