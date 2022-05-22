@@ -11,7 +11,7 @@ const accountSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    ammount: {
+    amount: {
       type: Number,
       set: (value) => value.toFixed(2),
       default: 0,

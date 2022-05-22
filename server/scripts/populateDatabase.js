@@ -3,6 +3,7 @@ const dotEnv = require("dotenv");
 const { populateClients } = require("./services/populateClients");
 const { populateCategories } = require("./services/populateCategories");
 const { populateAccounts } = require("./services/populateAccounts");
+const { populateTransactions } = require("./services/populateTransactions");
 dotEnv.config();
 
 const client = axios.create({
@@ -21,7 +22,9 @@ const main = async () => {
     const [users, categories] = await Promise.all([populateClients(), populateCategories()]);
     const usersWithAccounts = await populateAccounts(users);
 
-    console.log("Database successfully populated!");
+    const numberTransactions = await populateTransactions(usersWithAccounts, categories);
+    console.log(`Created ${numberTransactions} transactions`);
+    console.log("Database populated!");
   } catch (error) {
     console.log(error);
   }

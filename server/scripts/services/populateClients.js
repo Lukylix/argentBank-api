@@ -16,7 +16,7 @@ const users = [
   },
 ];
 
-module.exports.populateClients = async (req, res) => {
+module.exports.populateClients = async () => {
   createdUsers = [];
   users.forEach((user) => {
     axios

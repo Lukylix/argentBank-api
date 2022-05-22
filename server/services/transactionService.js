@@ -18,8 +18,8 @@ module.exports.createTransaction = async (serviceData) => {
       accountId: accountId,
       userId: serviceData.body.userId,
       categoryId: serviceData.body.categoryId,
-      ammount: serviceData.body.ammount,
-      balance: account.ammount + serviceData.body.ammount,
+      amount: serviceData.body.amount,
+      balance: account.amount + serviceData.body.amount,
       type: serviceData.body.type,
       description: serviceData.body.description,
     });
@@ -28,7 +28,7 @@ module.exports.createTransaction = async (serviceData) => {
     await Promise.all([
       result.populate("categoryId").execPopulate(),
       account.update({
-        $set: { ammount: serviceData.body.ammount + account.ammount },
+        $set: { amount: serviceData.body.amount + account.amount },
         $inc: { transactions: 1 },
       }),
     ]);

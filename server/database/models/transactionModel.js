@@ -17,7 +17,7 @@ const transactionSchema = new mongoose.Schema(
       ref: "Category",
       required: true,
     },
-    ammount: {
+    amount: {
       type: Number,
       set: (value) => value.toFixed(2),
       required: true,
