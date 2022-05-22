@@ -35,7 +35,10 @@ const transactionSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    note: String,
+    note: {
+      type: String,
+      default: "",
+    },
   },
   {
     timestamps: true,

@@ -1,8 +1,12 @@
 const Account = require("../database/models/accountModel");
+const User = require("../database/models/userModel");
 const jwt = require("jsonwebtoken");
 
 module.exports.createAccount = async (serviceData) => {
   try {
+    const user = await User.findById(serviceData.body.userId);
+    if (!user) throw new Error("User not found!");
+
     const newAccount = new Account({
       userId: serviceData.userId,
       type: serviceData.type,
