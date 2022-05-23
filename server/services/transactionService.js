@@ -42,6 +42,8 @@ module.exports.createTransaction = async (serviceData) => {
 
 module.exports.getTransactions = async (serviceData) => {
   try {
+    const itemsPerPage = 20;
+    const page = serviceData?.body?.page || 1;
     const { accountId } = serviceData.params;
     const jwtToken = serviceData.headers.authorization.split("Bearer")[1].trim();
     const decodedJwtToken = jwt.decode(jwtToken);
@@ -50,13 +52,23 @@ module.exports.getTransactions = async (serviceData) => {
     const account = await Account.findOne({ _id: accountId, userId: decodedJwtToken.id });
     if (!account) throw new Error("Account not found!");
 
-    const transactions = await Transaction.find({ accountId: accountId, userId: decodedJwtToken.id })
-      .populate("categoryId")
-      .sort({ createdAt: -1 })
-      .allowDiskUse();
+    const [transactions, count] = await Promise.all([
+      Transaction.find({ accountId: accountId, userId: decodedJwtToken.id })
+        .sort({ createdAt: -1 })
+        .skip((page - 1) * itemsPerPage)
+        .limit(itemsPerPage)
+        .populate("categoryId")
+        .allowDiskUse(),
+      Transaction.find({ accountId: accountId, userId: decodedJwtToken.id }).count(),
+    ]);
     if (!transactions) throw new Error("Transactions not found!");
 
-    return transactions.map((transaction) => transaction.toObject());
+    return {
+      total: count,
+      page,
+      totalPage: Math.ceil(count / itemsPerPage),
+      transactions: transactions.map((transaction) => transaction.toObject()),
+    };
   } catch (error) {
     console.error("Error in transactionService.js", error);
     throw new Error(error);
