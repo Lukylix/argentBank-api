@@ -43,11 +43,10 @@ module.exports.createTransaction = async (serviceData) => {
 module.exports.getTransactions = async (serviceData) => {
   try {
     const itemsPerPage = 20;
-    const page = serviceData?.body?.page || 1;
+    const page = parseInt(serviceData?.query?.page) || 1;
     const { accountId } = serviceData.params;
     const jwtToken = serviceData.headers.authorization.split("Bearer")[1].trim();
     const decodedJwtToken = jwt.decode(jwtToken);
-    console.log(accountId, decodedJwtToken.id);
 
     const account = await Account.findOne({ _id: accountId, userId: decodedJwtToken.id });
     if (!account) throw new Error("Account not found!");
@@ -59,7 +58,7 @@ module.exports.getTransactions = async (serviceData) => {
         .limit(itemsPerPage)
         .populate("categoryId")
         .allowDiskUse(),
-      Transaction.find({ accountId: accountId, userId: decodedJwtToken.id }).count(),
+      Transaction.find({ accountId: accountId, userId: decodedJwtToken.id }).countDocuments(),
     ]);
     if (!transactions) throw new Error("Transactions not found!");
 
