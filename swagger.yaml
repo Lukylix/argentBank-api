@@ -35,11 +35,18 @@ paths:
           description: Internal Server Error
   /user/signup:
     post:
+      security:
+        - Internal: []
       tags:
-        - User Module
+        - Internal User Module
       summary: Signup
       description: API for Signup
       parameters:
+        - in: header
+          type: string
+          name: Authorization
+          description: Attach Internal apiKey
+          required: true
         - in: body
           name: body
           description: Signup Payload
@@ -58,7 +65,7 @@ paths:
         "500":
           description: Internal Server Error
   /user/profile:
-    post:
+    get:
       security:
         - Bearer: []
       tags:
@@ -67,6 +74,7 @@ paths:
       description: API for fetching a user profile
       parameters:
         - in: header
+          type: string
           name: Authorization
           description: Attach Bearer JWT token
           required: true
@@ -90,6 +98,7 @@ paths:
       description: API for updating a user profile
       parameters:
         - in: header
+          type: string
           name: Authorization
           description: Attach Bearer JWT token
           required: true
@@ -110,11 +119,212 @@ paths:
           description: Invalid Fields
         "500":
           description: Internal Server Error
+  /user/accounts:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - User Module
+      summary: User Acounts API
+      description: API to get a user bank accounts
+      parameters:
+        - in: header
+          type: string
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: User Acounts retrieved successully
+          schema:
+            $ref: "#/definitions/UserAccountsResponse"
+        "400":
+          description: Invalid Fields
+        "500":
+          description: Internal Server Error
+    post:
+      security:
+        - Internal: []
+      tags:
+        - Internal User Module
+      summary: User Acounts API
+      description: API to create a user bank account
+      parameters:
+        - in: header
+          type: string
+          name: Authorization
+          description: Attach Internal apiKey
+          required: true
+        - in: body
+          name: body
+          description: Create account attributes
+          required: true
+          schema:
+            $ref: "#/definitions/UserAccountCreate"
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: User Acounts created successully
+          schema:
+            $ref: "#/definitions/UserAccountResponse"
+        "400":
+          description: Invalid Fields
+        "500":
+          description: Internal Server Error
+  /user/accounts/{accountId}:
+    put:
+      security:
+        - Internal: []
+      tags:
+        - Internal User Module
+      summary: User Account Module
+      description: Api to update a user bank account
+      parameters:
+        - in: header
+          type: string
+          name: Authorization
+          description: Attach Internal apiKey
+          required: true
+        - in: path
+          name: accountId
+          type: string
+          required: true
+          description: ID of the account
+        - in: body
+          name: body
+          description: Update account attributes
+          required: true
+          schema:
+            $ref: "#/definitions/UserAccountUpdate"
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: User Acounts updated successully
+          schema:
+            $ref: "#/definitions/UserAccountResponse"
+        "400":
+          description: Invalid Fields
+        "500":
+          description: Internal Server Error
+  /user/accounts/{accountId}/transactions:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - User Module
+      summary: User Acounts Transactions API
+      description: API to get a user bank account transactions
+      parameters:
+        - in: header
+          type: string
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+        - in: path
+          name: accountId
+          type: string
+          required: true
+          description: ID of the account to get associated transaction
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: User Acounts Transactions retrieved successully
+          schema:
+            $ref: "#/definitions/UserAccountsTransactionsResponse"
+        "400":
+          description: Invalid Fields
+        "500":
+          description: Internal Server Error
+    post:
+      security:
+        - Internal: []
+      tags:
+        - Internal User Module
+      summary: User Acounts Transactions API
+      description: API to get create user bank account transaction
+      parameters:
+        - in: header
+          type: string
+          name: Authorization
+          description: Attach Internal apiKey
+          required: true
+        - in: path
+          name: accountId
+          type: string
+          required: true
+          description: ID of the account to get associated transaction
+        - in: body
+          name: body
+          description: Update user profile attributes
+          required: true
+          schema:
+            $ref: "#/definitions/UserAccountsTransactionCreate"
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: User Acounts Transactions retrieved successully
+          schema:
+            $ref: "#/definitions/UserAccountsTransactionsResponse"
+        "400":
+          description: Invalid Fields
+        "500":
+          description: Internal Server Error
+  /user/accounts/{accountId}/transactions/{transactionId}:
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - User Module
+      summary: User Acounts Transactions API
+      description: API to modify a user bank account transaction
+      parameters:
+        - in: header
+          type: string
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+        - in: path
+          name: accountId
+          type: string
+          required: true
+          description: ID of the account to get associated transaction
+        - in: path
+          name: transactionId
+          type: string
+          required: true
+          description: ID oh the transaction to modify
+        - in: body
+          name: body
+          description: Update transaction attributes
+          required: true
+          schema:
+            $ref: "#/definitions/UserAccountsTransactionUpdate"
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Transaction updated successully
+          schema:
+            $ref: "#/definitions/UserAccountsTransactionResponse"
+        "400":
+          description: Invalid Fields
+        "500":
+          description: Internal Server Error
 securityDefinitions:
   Bearer:
     type: apiKey
     name: Authorization
     in: header
+  Internal:
+    type: apiKey
+    in: header
+    name: API-Key
 definitions:
   User:
     properties:
@@ -148,7 +358,7 @@ definitions:
       body:
         type: object
         properties:
-          id:
+          _id:
             type: string
           email:
             type: string
@@ -164,3 +374,157 @@ definitions:
         type: string
       lastName:
         type: string
+  UserAccountCreate:
+    type: object
+    properties:
+      userId:
+        type: string
+      type:
+        type: string
+      amount:
+        type: number
+        format: float
+      transactions:
+        type: number
+  UserAccountUpdate:
+    type: object
+    properties:
+      amount:
+        type: number
+        format: float
+      transactions:
+        type: number
+  UserAccountsResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: array
+        items:
+          type: object
+          properties:
+            _id:
+              type: string
+            userId:
+              type: string
+            type:
+              type: string
+            amount:
+              type: number
+              format: float
+            transactions:
+              type: number
+  UserAccountResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: object
+        properties:
+          _id:
+            type: string
+          userId:
+            type: string
+          type:
+            type: string
+          amount:
+            type: number
+            format: float
+          transactions:
+            type: number
+  UserAccountsTransactionsResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: array
+        items:
+          type: object
+          properties:
+            _id:
+              type: string
+            userId:
+              type: string
+            accountId:
+              type: string
+            description:
+              type: string
+            amount:
+              type: number
+              format: float
+            balance:
+              type: number
+              format: float
+            type:
+              type: string
+            category:
+              type: string
+            note:
+              type: string
+  UserAccountsTransactionCreate:
+    type: object
+    properties:
+      userId:
+        type: string
+      accountId:
+        type: string
+      description:
+        type: string
+      amount:
+        type: number
+        format: float
+      balance:
+        type: number
+        format: float
+      type:
+        type: string
+      category:
+        type: string
+      note:
+        type: string
+  UserAccountsTransactionUpdate:
+    type: object
+    properties:
+      category:
+        type: string
+      note:
+        type: string
+  UserAccountsTransactionResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: object
+        properties:
+          _id:
+            type: string
+          userId:
+            type: string
+          accountId:
+            type: string
+          description:
+            type: string
+          amount:
+            type: number
+            format: float
+          balance:
+            type: number
+            format: float
+          type:
+            type: string
+          category:
+            type: string
+          note:
+            type: string
