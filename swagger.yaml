@@ -30,9 +30,9 @@ paths:
           schema:
             $ref: "#/definitions/LoginResponse"
         "400":
-          description: Invalid Fields
+          description: Invalid Field.
         "500":
-          description: Internal Server Error
+          description: Internal Server Error.
   /user/signup:
     post:
       security:
@@ -61,9 +61,11 @@ paths:
           schema:
             $ref: "#/definitions/ApiResponse"
         "400":
-          description: Invalid Fields
+          description: Invalid Field.
+        "401":
+          description: Authorization is missing or invalid.
         "500":
-          description: Internal Server Error
+          description: Internal Server Error.
   /user/profile:
     get:
       security:
@@ -86,9 +88,11 @@ paths:
           schema:
             $ref: "#/definitions/ApiResponse"
         "400":
-          description: Invalid Fields
+          description: Invalid Field.
+        "401":
+          description: Authorization is missing or invalid.
         "500":
-          description: Internal Server Error
+          description: Internal Server Error.
     put:
       security:
         - Bearer: []
@@ -116,9 +120,11 @@ paths:
           schema:
             $ref: "#/definitions/ApiResponse"
         "400":
-          description: Invalid Fields
+          description: Invalid Field.
+        "401":
+          description: Authorization is missing or invalid.
         "500":
-          description: Internal Server Error
+          description: Internal Server Error.
   /user/accounts:
     get:
       security:
@@ -141,9 +147,11 @@ paths:
           schema:
             $ref: "#/definitions/UserAccountsResponse"
         "400":
-          description: Invalid Fields
+          description: Invalid Field.
+        "401":
+          description: Authorization is missing or invalid.
         "500":
-          description: Internal Server Error
+          description: Internal Server Error.
     post:
       security:
         - Internal: []
@@ -171,9 +179,11 @@ paths:
           schema:
             $ref: "#/definitions/UserAccountResponse"
         "400":
-          description: Invalid Fields
+          description: Invalid Field.
+        "401":
+          description: Authorization is missing or invalid.
         "500":
-          description: Internal Server Error
+          description: Internal Server Error.
   /user/accounts/{accountId}:
     put:
       security:
@@ -207,9 +217,11 @@ paths:
           schema:
             $ref: "#/definitions/UserAccountResponse"
         "400":
-          description: Invalid Fields
+          description: Invalid Field.
+        "401":
+          description: Authorization is missing or invalid.
         "500":
-          description: Internal Server Error
+          description: Internal Server Error.
   /user/accounts/{accountId}/transactions:
     get:
       security:
@@ -237,9 +249,11 @@ paths:
           schema:
             $ref: "#/definitions/UserAccountsTransactionsResponse"
         "400":
-          description: Invalid Fields
+          description: Invalid Field.
+        "401":
+          description: Authorization is missing or invalid.
         "500":
-          description: Internal Server Error
+          description: Internal Server Error.
     post:
       security:
         - Internal: []
@@ -272,9 +286,11 @@ paths:
           schema:
             $ref: "#/definitions/UserAccountsTransactionsResponse"
         "400":
-          description: Invalid Fields
+          description: Invalid Field.
+        "401":
+          description: Authorization is missing or invalid.
         "500":
-          description: Internal Server Error
+          description: Internal Server Error.
   /user/accounts/{accountId}/transactions/{transactionId}:
     put:
       security:
@@ -313,9 +329,11 @@ paths:
           schema:
             $ref: "#/definitions/UserAccountsTransactionResponse"
         "400":
-          description: Invalid Fields
+          description: Invalid Field.
+        "401":
+          description: Authorization is missing or invalid.
         "500":
-          description: Internal Server Error
+          description: Internal Server Error.
 securityDefinitions:
   Bearer:
     type: apiKey
