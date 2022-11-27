@@ -7,7 +7,7 @@ router.post("/signup", userController.createUser);
 
 router.post("/login", userController.loginUser);
 
-router.post("/profile", tokenValidation.validateToken, userController.getUserProfile);
+router.get("/profile", tokenValidation.validateToken, userController.getUserProfile);
 
 router.put("/profile", tokenValidation.validateToken, userController.updateUserProfile);
 

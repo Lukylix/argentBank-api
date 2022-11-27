@@ -1,13 +1,11 @@
-swagger: "2.0"
+openapi: 3.0.1
 info:
   title: Bank Argent API documentation
   description: Contains all available API endpoints in this codebase
-  version: "1.0.0"
-  termsOfService: "http://swagger.io/terms/"
-host: localhost:3001
-basePath: /api/v1
-schemes:
-  - http
+  termsOfService: http://swagger.io/terms/
+  version: 1.0.0
+servers:
+  - url: http://localhost:3001/api/v1
 paths:
   /user/login:
     post:
@@ -15,419 +13,603 @@ paths:
         - User Module
       summary: Login
       description: API for Login
-      parameters:
-        - in: body
-          name: body
-          description: Login Payload
-          required: true
-          schema:
-            $ref: "#/definitions/Login"
-      produces:
-        - application/json
+      requestBody:
+        description: Login Payload
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Login"
+        required: true
       responses:
-        "200":
+        200:
           description: Login Successfully
-          schema:
-            $ref: "#/definitions/LoginResponse"
-        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        400:
           description: Invalid Field.
-        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400ErrorReponse"
+        500:
           description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500ErrorReponse"
+      x-codegen-request-body-name: body
   /user/signup:
     post:
-      security:
-        - Internal: []
       tags:
-        - Internal User Module
+        - Internal Module
       summary: Signup
       description: API for Signup
-      parameters:
-        - in: header
-          type: string
-          name: Authorization
-          description: Attach Internal apiKey
-          required: true
-        - in: body
-          name: body
-          description: Signup Payload
-          required: true
-          schema:
-            $ref: "#/definitions/User"
-      produces:
-        - application/json
+      requestBody:
+        description: Signup Payload
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserCreate"
+        required: true
       responses:
-        "200":
+        200:
           description: Signup Successfully
-          schema:
-            $ref: "#/definitions/ApiResponse"
-        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        400:
           description: Invalid Field.
-        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400ErrorReponse"
+        401:
           description: Authorization is missing or invalid.
-        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401ErrorReponse"
+        500:
           description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500ErrorReponse"
+      security:
+        - Internal: []
+      x-codegen-request-body-name: body
   /user/profile:
     get:
-      security:
-        - Bearer: []
       tags:
         - User Module
       summary: User Profile API
-      description: API for fetching a user profile
-      parameters:
-        - in: header
-          type: string
-          name: Authorization
-          description: Attach Bearer JWT token
-          required: true
-      produces:
-        - application/json
+      description: API to get user profile
       responses:
-        "200":
+        200:
           description: User profile retrieved successully
-          schema:
-            $ref: "#/definitions/ApiResponse"
-        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        400:
           description: Invalid Field.
-        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400ErrorReponse"
+        401:
           description: Authorization is missing or invalid.
-        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401ErrorReponse"
+        500:
           description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500ErrorReponse"
+      security:
+        - UserAuth: []
     put:
-      security:
-        - Bearer: []
       tags:
         - User Module
       summary: User Profile API
-      description: API for updating a user profile
-      parameters:
-        - in: header
-          type: string
-          name: Authorization
-          description: Attach Bearer JWT token
-          required: true
-        - in: body
-          name: body
-          description: Update user profile attributes
-          required: true
-          schema:
-            $ref: "#/definitions/UserProfile"
-      produces:
-        - application/json
+      description: API for updating user profile
+      requestBody:
+        description: Update user profile attributes
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserModify"
+        required: true
       responses:
-        "200":
+        200:
           description: User profile retrieved successully
-          schema:
-            $ref: "#/definitions/ApiResponse"
-        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        400:
           description: Invalid Field.
-        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400ErrorReponse"
+        401:
           description: Authorization is missing or invalid.
-        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401ErrorReponse"
+        500:
           description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500ErrorReponse"
+      security:
+        - UserAuth: []
+      x-codegen-request-body-name: body
   /user/accounts:
     get:
-      security:
-        - Bearer: []
       tags:
         - User Module
-      summary: User Acounts API
+      summary: User Accounts API
       description: API to get a user bank accounts
-      parameters:
-        - in: header
-          type: string
-          name: Authorization
-          description: Attach Bearer JWT token
-          required: true
-      produces:
-        - application/json
       responses:
-        "200":
-          description: User Acounts retrieved successully
-          schema:
-            $ref: "#/definitions/UserAccountsResponse"
-        "400":
+        200:
+          description: User Accounts retrieved successully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserAccountsResponse"
+        400:
           description: Invalid Field.
-        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400ErrorReponse"
+        401:
           description: Authorization is missing or invalid.
-        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401ErrorReponse"
+        500:
           description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500ErrorReponse"
+      security:
+        - UserAuth: []
     post:
+      tags:
+        - Internal Module
+      summary: User Accounts API
+      description: API to create a user bank account
+      requestBody:
+        description: Create account attributes
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserAccountCreate"
+        required: true
+      responses:
+        200:
+          description: User Accounts created successully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserAccountResponse"
+        400:
+          description: Invalid Field.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400ErrorReponse"
+        401:
+          description: Authorization is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401ErrorReponse"
+        500:
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500ErrorReponse"
       security:
         - Internal: []
-      tags:
-        - Internal User Module
-      summary: User Acounts API
-      description: API to create a user bank account
-      parameters:
-        - in: header
-          type: string
-          name: Authorization
-          description: Attach Internal apiKey
-          required: true
-        - in: body
-          name: body
-          description: Create account attributes
-          required: true
-          schema:
-            $ref: "#/definitions/UserAccountCreate"
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: User Acounts created successully
-          schema:
-            $ref: "#/definitions/UserAccountResponse"
-        "400":
-          description: Invalid Field.
-        "401":
-          description: Authorization is missing or invalid.
-        "500":
-          description: Internal Server Error.
+      x-codegen-request-body-name: body
   /user/accounts/{accountId}:
     put:
+      tags:
+        - Internal Module
+      summary: User Accounts API
+      description: API to disable or enable user bank account
+      parameters:
+        - name: accountId
+          in: path
+          description: ID of the account to modify
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update account attributes
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserAccountModify"
+        required: true
+      responses:
+        200:
+          description: Account successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserAccountResponse"
+        400:
+          description: Invalid Field.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400ErrorReponse"
+        401:
+          description: Authorization is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401ErrorReponse"
+        500:
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500ErrorReponse"
       security:
         - Internal: []
-      tags:
-        - Internal User Module
-      summary: User Account Module
-      description: Api to update a user bank account
-      parameters:
-        - in: header
-          type: string
-          name: Authorization
-          description: Attach Internal apiKey
-          required: true
-        - in: path
-          name: accountId
-          type: string
-          required: true
-          description: ID of the account
-        - in: body
-          name: body
-          description: Update account attributes
-          required: true
-          schema:
-            $ref: "#/definitions/UserAccountUpdate"
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: User Acounts updated successully
-          schema:
-            $ref: "#/definitions/UserAccountResponse"
-        "400":
-          description: Invalid Field.
-        "401":
-          description: Authorization is missing or invalid.
-        "500":
-          description: Internal Server Error.
-  /user/accounts/{accountId}/transactions:
+      x-codegen-request-body-name: body
+  /user/accounts/{accountId}/transactions{?page}:
     get:
-      security:
-        - Bearer: []
       tags:
         - User Module
-      summary: User Acounts Transactions API
+      summary: User Accounts Transactions API
       description: API to get a user bank account transactions
       parameters:
-        - in: header
-          type: string
-          name: Authorization
-          description: Attach Bearer JWT token
-          required: true
-        - in: path
-          name: accountId
-          type: string
-          required: true
+        - name: accountId
+          in: path
           description: ID of the account to get associated transaction
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: User Acounts Transactions retrieved successully
+          required: true
           schema:
-            $ref: "#/definitions/UserAccountsTransactionsResponse"
-        "400":
+            type: string
+        - name: page
+          in: querry
+          description: Desired page number (20 transactions per page)
+      responses:
+        200:
+          description: User Accounts Transactions retrieved successully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserAccountsTransactionsResponse"
+        400:
           description: Invalid Field.
-        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400ErrorReponse"
+        401:
           description: Authorization is missing or invalid.
-        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401ErrorReponse"
+        500:
           description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500ErrorReponse"
+      security:
+        - UserAuth: []
+      x-codegen-request-body-name: body
+  /user/accounts/{accountId}/transactions:
     post:
+      tags:
+        - Internal Module
+      summary: User Accounts Transactions API
+      description: API to create user bank account transaction
+      parameters:
+        - name: accountId
+          in: path
+          description: ID of the account to get associated transaction
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update transaction attributes
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserAccountsTransactionCreate"
+        required: true
+      responses:
+        200:
+          description: Transaction successfully created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserAccountsTransactionResponse"
+        400:
+          description: Invalid Field.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400ErrorReponse"
+        401:
+          description: Authorization is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401ErrorReponse"
+        500:
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500ErrorReponse"
       security:
         - Internal: []
-      tags:
-        - Internal User Module
-      summary: User Acounts Transactions API
-      description: API to get create user bank account transaction
-      parameters:
-        - in: header
-          type: string
-          name: Authorization
-          description: Attach Internal apiKey
-          required: true
-        - in: path
-          name: accountId
-          type: string
-          required: true
-          description: ID of the account to get associated transaction
-        - in: body
-          name: body
-          description: Update user profile attributes
-          required: true
-          schema:
-            $ref: "#/definitions/UserAccountsTransactionCreate"
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: User Acounts Transactions retrieved successully
-          schema:
-            $ref: "#/definitions/UserAccountsTransactionsResponse"
-        "400":
-          description: Invalid Field.
-        "401":
-          description: Authorization is missing or invalid.
-        "500":
-          description: Internal Server Error.
+      x-codegen-request-body-name: body
   /user/accounts/{accountId}/transactions/{transactionId}:
     put:
-      security:
-        - Bearer: []
       tags:
         - User Module
-      summary: User Acounts Transactions API
+      summary: User Accounts Transactions API
       description: API to modify a user bank account transaction
       parameters:
-        - in: header
-          type: string
-          name: Authorization
-          description: Attach Bearer JWT token
-          required: true
-        - in: path
-          name: accountId
-          type: string
-          required: true
+        - name: accountId
+          in: path
           description: ID of the account to get associated transaction
-        - in: path
-          name: transactionId
-          type: string
           required: true
+          schema:
+            type: string
+        - name: transactionId
+          in: path
           description: ID oh the transaction to modify
-        - in: body
-          name: body
-          description: Update transaction attributes
           required: true
           schema:
-            $ref: "#/definitions/UserAccountsTransactionUpdate"
-      produces:
-        - application/json
+            type: string
+      requestBody:
+        description: Update transaction attributes
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserAccountsTransactionUpdate"
+        required: true
       responses:
-        "200":
+        200:
           description: Transaction updated successully
-          schema:
-            $ref: "#/definitions/UserAccountsTransactionResponse"
-        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserAccountsTransactionResponse"
+        400:
           description: Invalid Field.
-        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400ErrorReponse"
+        401:
           description: Authorization is missing or invalid.
-        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401ErrorReponse"
+        500:
           description: Internal Server Error.
-securityDefinitions:
-  Bearer:
-    type: apiKey
-    name: Authorization
-    in: header
-  Internal:
-    type: apiKey
-    in: header
-    name: API-Key
-definitions:
-  User:
-    properties:
-      email:
-        type: string
-        description: user email
-      password:
-        type: string
-        description: user password
-      firstName:
-        type: string
-        description: user first name
-      lastName:
-        type: string
-        description: user last name
-  Login:
-    properties:
-      email:
-        type: string
-        description: user email
-      password:
-        type: string
-        description: user password
-  ApiResponse:
-    type: object
-    properties:
-      status:
-        type: integer
-      message:
-        type: string
-      body:
-        type: object
-        properties:
-          _id:
-            type: string
-          email:
-            type: string
-  LoginResponse:
-    type: object
-    properties:
-      token:
-        type: string
-  UserProfile:
-    type: object
-    properties:
-      firstName:
-        type: string
-      lastName:
-        type: string
-  UserAccountCreate:
-    type: object
-    properties:
-      userId:
-        type: string
-      type:
-        type: string
-      amount:
-        type: number
-        format: float
-      transactions:
-        type: number
-  UserAccountUpdate:
-    type: object
-    properties:
-      amount:
-        type: number
-        format: float
-      transactions:
-        type: number
-  UserAccountsResponse:
-    type: object
-    properties:
-      status:
-        type: integer
-      message:
-        type: string
-      body:
-        type: array
-        items:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500ErrorReponse"
+      security:
+        - UserAuth: []
+      x-codegen-request-body-name: body
+  /categories:
+    get:
+      tags:
+        - User Module
+      summary: Transactions Categories API
+      description: API to get transactions categories
+      responses:
+        200:
+          description: Categories retrived successully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CategoriesResponse"
+        400:
+          description: Invalid Field.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400ErrorReponse"
+        401:
+          description: Authorization is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401ErrorReponse"
+        500:
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500ErrorReponse"
+      security:
+        - UserAuth: []
+      x-codegen-request-body-name: body
+    post:
+      tags:
+        - Internal Module
+      summary: Transactions Categories API
+      description: API to create transactions category
+      requestBody:
+        description: Create transaction category
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Category"
+        required: true
+      responses:
+        200:
+          description: Category created successully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CategoryResponse"
+        400:
+          description: Invalid Field.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/400ErrorReponse"
+        401:
+          description: Authorization is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401ErrorReponse"
+        500:
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/500ErrorReponse"
+      security:
+        - Internal: []
+      x-codegen-request-body-name: body
+components:
+  securitySchemes:
+    UserAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    Internal:
+      name: authorization
+      type: apiKey
+      in: header
+  schemas:
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: tony@stark.com
+          description: user email
+        password:
+          type: string
+          format: password
+          description: user password
+    LoginResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 200
+        message:
+          type: string
+        body:
           type: object
           properties:
-            _id:
+            token:
               type: string
+    UserCreate:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: tony@stark.com
+          description: user email
+        firstName:
+          type: string
+          description: user first name
+        lastName:
+          type: string
+          description: user last name
+    UserModify:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+    UserResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 200
+        message:
+          type: string
+        body:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            email:
+              type: string
+              format: email
+            firstName:
+              type: string
+            lastName:
+              type: string
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+    UserAccountCreate:
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+        type:
+          type: string
+    UserAccountModify:
+      type: object
+      properties:
+        disabled:
+          type: boolean
+          example: false
+    UserAccountResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 200
+        message:
+          type: string
+        body:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
             userId:
               type: string
+              format: uuid
             type:
               type: string
             amount:
@@ -435,45 +617,99 @@ definitions:
               format: float
             transactions:
               type: number
-  UserAccountResponse:
-    type: object
-    properties:
-      status:
-        type: integer
-      message:
-        type: string
-      body:
-        type: object
-        properties:
-          _id:
-            type: string
-          userId:
-            type: string
-          type:
-            type: string
-          amount:
-            type: number
-            format: float
-          transactions:
-            type: number
-  UserAccountsTransactionsResponse:
-    type: object
-    properties:
-      status:
-        type: integer
-      message:
-        type: string
-      body:
-        type: array
-        items:
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+            disabled:
+              type: boolean
+              example: false
+    UserAccountsResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 200
+        message:
+          type: string
+        body:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              userId:
+                type: string
+                format: uuid
+              type:
+                type: string
+              amount:
+                type: number
+                format: float
+              transactions:
+                type: number
+              createdAt:
+                type: string
+                format: date-time
+              updatedAt:
+                type: string
+                format: date-time
+              disabled:
+                type: boolean
+                example: false
+    UserAccountsTransactionCreate:
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+        description:
+          type: string
+        amount:
+          type: number
+          format: float
+        balance:
+          type: number
+          format: float
+        type:
+          type: string
+        categoryId:
+          type: string
+          format: uuid
+        note:
+          type: string
+    UserAccountsTransactionUpdate:
+      type: object
+      properties:
+        categoryId:
+          type: string
+          format: uuid
+        note:
+          type: string
+    UserAccountsTransactionResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 200
+        message:
+          type: string
+        body:
           type: object
           properties:
-            _id:
+            id:
               type: string
+              format: uuid
             userId:
               type: string
+              format: uuid
             accountId:
               type: string
+              format: uuid
             description:
               type: string
             amount:
@@ -484,65 +720,142 @@ definitions:
               format: float
             type:
               type: string
-            category:
+            createdAt:
               type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+            category:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                name:
+                  type: string
             note:
               type: string
-  UserAccountsTransactionCreate:
-    type: object
-    properties:
-      userId:
-        type: string
-      accountId:
-        type: string
-      description:
-        type: string
-      amount:
-        type: number
-        format: float
-      balance:
-        type: number
-        format: float
-      type:
-        type: string
-      category:
-        type: string
-      note:
-        type: string
-  UserAccountsTransactionUpdate:
-    type: object
-    properties:
-      category:
-        type: string
-      note:
-        type: string
-  UserAccountsTransactionResponse:
-    type: object
-    properties:
-      status:
-        type: integer
-      message:
-        type: string
-      body:
-        type: object
-        properties:
-          _id:
-            type: string
-          userId:
-            type: string
-          accountId:
-            type: string
-          description:
-            type: string
-          amount:
-            type: number
-            format: float
-          balance:
-            type: number
-            format: float
-          type:
-            type: string
-          category:
-            type: string
-          note:
-            type: string
+    UserAccountsTransactionsResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 200
+        message:
+          type: string
+        body:
+          type: object
+          properties:
+            total:
+              type: number
+              exemple: 484
+            page:
+              type: number
+              example: 1
+            totalPage:
+              type: number
+              example: 25
+            transactions:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  userId:
+                    type: string
+                    format: uuid
+                  accountId:
+                    type: string
+                    format: uuid
+                  description:
+                    type: string
+                  amount:
+                    type: number
+                    format: float
+                  balance:
+                    type: number
+                    format: float
+                  type:
+                    type: string
+                  createdAt:
+                    type: string
+                    format: date-time
+                  updatedAt:
+                    type: string
+                    format: date-time
+                  category:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                      name:
+                        type: string
+                  note:
+                    type: string
+    Category:
+      type: object
+      properties:
+        name:
+          type: string
+    CategoryResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 200
+        message:
+          type: string
+        body:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            name:
+              type: string
+    CategoriesResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 200
+        message:
+          type: string
+        body:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              name:
+                type: string
+    401ErrorReponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 401
+        message:
+          type: string
+    400ErrorReponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 400
+        message:
+          type: string
+    500ErrorReponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 500
+        message:
+          type: string

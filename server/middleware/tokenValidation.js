@@ -6,8 +6,7 @@ module.exports.validateToken = (req, res, next) => {
     if (!req.headers.authorization) {
       throw new Error("Token is missing from header");
     }
-
-    const userToken = req.headers.authorization.split("Bearer")[1].trim();
+    const userToken = req.headers.authorization.split("Bearer")?.[1]?.trim();
     const decodedToken = jwt.verify(userToken, process.env.SECRET_KEY || "default-secret-key");
     return next();
   } catch (error) {

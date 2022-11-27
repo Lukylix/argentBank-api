@@ -32,8 +32,10 @@ module.exports.createTransaction = async (serviceData) => {
         $inc: { transactions: 1 },
       }),
     ]);
-
-    return result.toObject();
+    result = result.toObject();
+    const transaction = { ...result, category: result.categoryId };
+    delete transaction.categoryId;
+    return transaction;
   } catch (error) {
     console.error("Error in transactionService.js", error);
     throw new Error(error);
@@ -66,7 +68,12 @@ module.exports.getTransactions = async (serviceData) => {
       total: count,
       page,
       totalPage: Math.ceil(count / itemsPerPage),
-      transactions: transactions.map((transaction) => transaction.toObject()),
+      transactions: transactions.map((transaction) => {
+        transaction = transaction.toObject();
+        transaction = { ...transaction, category: transaction.categoryId };
+        delete transaction.categoryId;
+        return transaction;
+      }),
     };
   } catch (error) {
     console.error("Error in transactionService.js", error);
@@ -101,8 +108,10 @@ module.exports.updateTransaction = async (serviceData) => {
       { new: true }
     ).populate("categoryId");
     if (!transaction) throw new Error("Transaction not found!");
-
-    return transaction.toObject();
+    let transactionObject = transaction.toObject();
+    transactionObject = { ...transactionObject, category: transactionObject.categoryId };
+    delete transactionObject.categoryId;
+    return transactionObject;
   } catch (error) {
     console.error("Error in transactionService.js", error);
     throw new Error(error);
