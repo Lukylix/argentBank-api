@@ -26,7 +26,7 @@ module.exports.createTransaction = async (serviceData) => {
 
     let result = await newTransaction.save();
     await Promise.all([
-      result.populate("categoryId").execPopulate(),
+      result.populate("categoryId"),
       account.update({
         $set: { amount: serviceData.body.amount + account.amount },
         $inc: { transactions: 1 },

@@ -1,6 +1,8 @@
 const axios = require("axios");
 const { setTimeoutWithReturn } = require("../utilis/setTimeoutWithReturn");
 
+const baseURL = process.env.API_BASEURL || "http://localhost:3000";
+
 const categories = [
   "Food",
   "Bills",
@@ -24,9 +26,9 @@ module.exports.populateCategories = async () => {
   categories.forEach((category) => {
     axios
       .post(
-        "http://localhost:3001/api/v1/categories",
+        `${baseURL}/api/v1/categories`,
         { name: category },
-        { headers: { authorization: process.env.API_KEY } }
+        { headers: { authorization: process.env.API_KEY || "default-secret-key" } }
       )
       .then((res) => {
         createdCategories.push(res.data.body);

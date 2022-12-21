@@ -1,0 +1,41 @@
+version: '3.1'
+services:
+  argentbank-mongo:
+    image: mongo:latest
+    restart: unless-stopped
+    container_name: argentbank-mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: changeme
+    #volumes:
+    #  - /my/own/datadir:/data/db
+  argentbank-api:
+    image: registry.iloa.dev/argentbank-api:latest
+    restart: unless-stopped
+    depends_on:
+      - argentbank-mongo
+    ports:
+      - 3000:3000
+    environment: 
+      DATABASE_URL: mongodb://argentbank-mongo/argentBankDB
+      DATABASE_USER: root
+      DATABASE_PASSWORD: changeme
+      API_KEY: changeme-api-key
+      SECRET_KEY: changeme-secret-key
+  argentbank-populate-db:
+    image: registry.iloa.dev/argentbank-api:latest
+    command: npm run populate-db
+    restart: "no"
+    depends_on:
+      - argentbank-api
+    environment: 
+      DATABASE_URL: mongodb://argentbank-mongo/argentBankDB
+      DATABASE_USER: root
+      DATABASE_PASSWORD: changeme
+      API_KEY: changeme-api-key
+      API_BASEURL: http://argentbank-api:3000
+networks:
+  default:
+    external: true
+    # Replace with your shared network
+    name: shared-nginx-proxy-network

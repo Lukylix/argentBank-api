@@ -3,20 +3,22 @@ const { setTimeoutWithReturn } = require("../utilis/setTimeoutWithReturn");
 
 const bankAccountTypes = ["Checking", "Savings", "Credit Card"];
 
+const baseURL = process.env.API_BASEURL || "http://localhost:3000";
+
 module.exports.populateAccounts = async (users) => {
   users.forEach((user) => {
     user.accounts = [];
     bankAccountTypes.forEach((accountType) => {
       axios
         .post(
-          "http://localhost:3001/api/v1/user/accounts",
+          `${baseURL}/api/v1/user/accounts`,
           {
             userId: user.id,
             type: accountType,
           },
           {
             headers: {
-              authorization: process.env.API_KEY,
+              authorization: process.env.API_KEY || "default-secret-key",
             },
           }
         )

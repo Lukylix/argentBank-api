@@ -8,7 +8,7 @@ This codebase contains the code needed to run the backend for Argent Bank.
 
 Argent Bank uses the following tech stack:
 
-- [Node.js v12](https://nodejs.org/en/)
+- [Node.js v16](https://nodejs.org/en/)
 - [MongoDB Community Server](https://www.mongodb.com/try/download/community)
 
 Please make sure you have the right versions and download both packages. You can verify this by using the following commands in your terminal:
@@ -39,7 +39,7 @@ npm run dev:server
 npm run populate-db
 ```
 
-Your server should now be running at http://locahost:3001 and you will now have two users in your MongoDB database!
+Your server should now be running at http://locahost:3000 and you will now have two users in your MongoDB database!
 
 ## Populated Database Data
 
@@ -61,7 +61,7 @@ Once you run the `populate-db` script, you should have two users in your databas
 
 ## API Documentation
 
-To learn more about how the API works, once you have started your local environment, you can visit: http://localhost:3001/api-docs
+To learn more about how the API works, once you have started your local environment, you can visit: http://localhost:3000/api-docs
 
 ## Design Assets
 

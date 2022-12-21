@@ -1,6 +1,8 @@
 const axios = require("axios");
 const { setTimeoutWithReturn } = require("../utilis/setTimeoutWithReturn");
 
+const baseURL = process.env.API_BASEURL || "http://localhost:3000";
+
 const users = [
   {
     firstName: "Tony",
@@ -20,7 +22,7 @@ module.exports.populateClients = async () => {
   createdUsers = [];
   users.forEach((user) => {
     axios
-      .post("http://localhost:3001/api/v1/user/signup", user)
+      .post(`${baseURL}/api/v1/user/signup`, user)
       .then((res) => {
         createdUsers.push({ ...res.data.body, password: user.password });
         console.log(`Created user ${user.email}`);

@@ -106,13 +106,15 @@ const transactions = [
 
 const random = (min, max) => Math.random() * (max - min + 1) + min;
 
+const baseURL = process.env.API_BASEURL || "http://localhost:3000";
+
 module.exports.populateTransactions = async (usersWithAccounts, categories) => {
   let createdTransactions = [];
   usersWithAccounts.forEach((user) => {
     user.accounts.forEach(async (account) => {
       await axios
         .post(
-          `http://localhost:3001/api/v1/user/accounts/${account.id}/transactions`,
+          `${baseURL}/api/v1/user/accounts/${account.id}/transactions`,
           {
             userId: user.id,
             description: "Initial deposit",
@@ -120,7 +122,7 @@ module.exports.populateTransactions = async (usersWithAccounts, categories) => {
             type: "Cheque",
             amount: random(10000, 40000),
           },
-          { headers: { authorization: process.env.API_KEY } }
+          { headers: { authorization: process.env.API_KEY || "default-secret-key" } }
         )
         .then((res) => {
           console.log(`Created initial transaction`);
@@ -136,7 +138,7 @@ module.exports.populateTransactions = async (usersWithAccounts, categories) => {
         const isRefound = Math.random() <= 0.05;
         await axios
           .post(
-            `http://localhost:3001/api/v1/user/accounts/${account.id}/transactions`,
+            `${baseURL}/api/v1/user/accounts/${account.id}/transactions`,
             {
               userId: user.id,
               description: transaction.name + (isRefound ? " Refound" : ""),
@@ -144,7 +146,7 @@ module.exports.populateTransactions = async (usersWithAccounts, categories) => {
               type: transaction.type,
               amount: isRefound ? random(5, 50) : random(5, 50) * -1,
             },
-            { headers: { authorization: process.env.API_KEY } }
+            { headers: { authorization: process.env.API_KEY || "default-secret-key" } }
           )
           .then((res) => {
             const transactionIndex = createdTransactions.findIndex(
